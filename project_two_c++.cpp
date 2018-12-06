@@ -46,6 +46,7 @@ class Task_master
 				return p1.return_priority() < p2.return_priority();
 			}
 		};
+
 		priority_queue<Task, vector<Task>, Compare_Priority> task_manager;
 	public:
 		void add(Task value);
@@ -59,8 +60,6 @@ class Task_master
 		
 		
 };
-
-
 
 bool Task_master::empty()
 {
@@ -85,11 +84,12 @@ void Task_master::add(Task value)
 
 void Task_master::print_queue()
 {
-	while(!task_manager.empty())
+	priority_queue<Task, vector<Task>, Compare_Priority> p_copy = task_manager;
+	while(!p_copy.empty())
 	{
-		Task task = top();
+		Task task = p_copy.top();
 		task.display_name();
-		pop();
+		p_copy.pop();
 	}
 }
 void Task_master::create_task()
@@ -162,11 +162,6 @@ void Task_master::process(Task new_task)
 	Sleep(200);
 	cout << ".";
 	cout << "Computer is finished" << endl;
-	cout << "Load next task y/n\n";
-	cin >> load_task;
-	if (load_task == 'n') {
-		break;
-	}
 
 		
 }
@@ -207,55 +202,59 @@ int main()
 	cout << "Press 8 : Read a Book" << endl;
 	cout << "Press 9 : To eat the popcorn" << endl;
 	cout << "Press 10 : To add additional tasks" << endl;
-	cout << "Press 0 to end the madness" << endl;
+	cout << "Enter execute to RUN the program" << endl;
 	if(master_queue.empty())
 	{
-		int choice = -1;
-		while(choice != 0)
+		string choice;
+		while(choice != "execute")
 		{
 		
 		cin >> choice;
 		
-			if(choice == 1)
+			if(choice == "1")
 			{
 				master_queue.add(task1);
 			}
 			
-			if(choice == 2)
+			else if(choice == "2")
 			{
 				master_queue.add(task2);
 			}
-			if(choice == 3)
+			else if(choice == "3")
 			{
 				master_queue.add(task3);
 			}
-			if(choice == 4)
+			else if(choice == "4")
 			{
 				master_queue.add(task4);
 			}
-			if(choice == 5)
+			else if(choice == "5")
 			{
 				master_queue.add(task5);
 			}
-			if(choice == 6)
+			else if(choice == "6")
 			{
 				master_queue.add(task6);
 			}
-			if(choice == 7)
+			else if(choice == "7")
 			{
 				master_queue.add(task7);
 			}
-			if(choice == 8)
+			else if(choice == "8")
 			{
 				master_queue.add(task8);
 			}
-			if(choice == 9)
+			else if(choice == "9")
 			{
 				master_queue.add(task9);
 			}
-			if(choice == 10)
+			else if(choice == "10")
 			{
 				master_queue.task_generator();
+			}
+			else
+			{
+				cout << "Enter a number from the list of choices or Enter \"execute\"" << endl;
 			}
 			
 			
@@ -263,31 +262,35 @@ int main()
 		}
    }
     system("cls");
-
+	cin.ignore();
 	while (!master_queue.empty())
 	{
 	string choice;
-	cout << "Do you want to remove the next task / add a task or stop the program" << endl;
-	cin >> choice;
+	cout << "Do you want to remove the next task / add a task or stop the program /// press enter to continue" << endl;
+	getline(cin, choice);
+
 	if (choice == "remove") {
 		cout << "The item has been removed" << endl;
 		master_queue.pop();
+		cout << "The items in queue are" << endl;
+		master_queue.print_queue();
+		cout << endl;
 		
 	}
 	else if (choice == "add") {
-		master_queue.create_task();
+		master_queue.task_generator();
 	}
 	else if (choice == "stop") {
 		break;
 	}
-	else {
-		continue;
+	else if (choice == ""){
+
+		Task task = master_queue.top();
+		master_queue.process(task);
+		master_queue.pop();
+		Sleep(800);
+		system("cls");
 	}
-	Task task = master_queue.top();
-	master_queue.process(task);
-	master_queue.pop();
-	Sleep(800);
-	system("cls");
 	}
 
 	}
